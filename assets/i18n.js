@@ -65,6 +65,7 @@ const I18N = {
     move: '移动/重命名',
     delete: '删除',
     edit: '编辑',
+    view: '查看',
     save: '保存',
     back: '返回',
     notEditable: '文件太大或为二进制文件，无法编辑',
@@ -95,6 +96,7 @@ const I18N = {
     language: '语言',
     chinese: '中文',
     english: 'English',
+    japanese: '日本語',
     // 批量操作
     selectFirst: '请先选择要删除的项目',
     bulkDeleteConfirm: (count) => `确定要删除选中的 ${count} 个项目吗？`,
@@ -214,6 +216,7 @@ const I18N = {
     move: 'Move/Rename',
     delete: 'Delete',
     edit: 'Edit',
+    view: 'View',
     save: 'Save',
     back: 'Back',
     notEditable: 'File is too large or binary, cannot edit',
@@ -244,6 +247,7 @@ const I18N = {
     language: 'Language',
     chinese: '中文',
     english: 'English',
+    japanese: '日本語',
     // Bulk actions
     selectFirst: 'Please select items to delete first',
     bulkDeleteConfirm: (count) => `Are you sure you want to delete ${count} selected items?`,
@@ -301,11 +305,165 @@ const I18N = {
     pageNotFoundDesc: 'Sorry, the page you are looking for does not exist.',
     goBack: 'Go Back',
     checkUrl: 'Please check if the URL is correct',
+  },
+  'ja-JP': {
+    searchPlaceholder: 'ファイルやフォルダを検索...',
+    switchLanguage: '言語を切り替え',
+    openUploadPanel: 'アップロードパネルを開く',
+    clearCompletedTasks: '完了・失敗したタスクをクリア',
+    close: '閉じる',
+    login: 'ログイン',
+    logout: 'ログアウト',
+    upload: 'アップロード',
+    newFolder: '新規フォルダ',
+    newFile: '新規ファイル',
+    downloadZip: 'ZIPをダウンロード',
+    downloadAll: 'すべてダウンロード',
+    listView: 'リスト表示',
+    gridView: 'グリッド表示',
+    sortOrder: '並び順を切り替え',
+    sortByName: 'ファイル名',
+    sortByMtime: '更新日時',
+    sortBySize: 'サイズ',
+    rootDirectory: 'ルートディレクトリ',
+    deleteAction: '削除',
+    cancelAction: 'キャンセル',
+    retryAction: '再試行',
+    restoreUploadTasks: 'アップロードタスクの復元',
+    pendingUploadTasks: '未完了のアップロードタスクが検出されました。ファイルを再選択してアップロードを続行してください：',
+    skip: 'スキップ',
+    restoreUpload: 'アップロードを復元',
+    uploaded: 'アップロード済み',
+    selectFile: 'ファイルを選択',
+    fileSelected: '✓ 選択済み',
+    fileMismatch: '選択されたファイルが元のファイルと一致しません！同じ名前とサイズのファイルを選択してください。',
+    loginTitle: 'ユーザーログイン',
+    usernameLabel: 'ユーザー名',
+    passwordLabel: 'パスワード',
+    rememberMe: 'ログイン状態を保持（7日間）',
+    cancel: 'キャンセル',
+    loginBtn: 'ログイン',
+    logoutTitle: 'ログアウト',
+    logoutConfirm: 'ログアウトしてもよろしいですか？',
+    logoutBtn: 'ログアウト',
+    uploadTasks: 'アップロードタスク',
+    fileName: 'ファイル名',
+    progress: '進捗',
+    status: 'ステータス',
+    waiting: '待機中...',
+    uploading: 'アップロード中...',
+    complete: '✓ 完了',
+    failed: '✗ 失敗',
+    retry: '↻',
+    name: 'ファイル名',
+    mtime: '更新日時',
+    size: 'サイズ',
+    actions: '操作',
+    noResults: '検索結果がありません',
+    emptyFolder: '空のフォルダ',
+    willCreateFolder: 'ファイルをアップロードすると自動的にフォルダが作成されます',
+    download: 'ダウンロード',
+    downloadZipAction: 'ZIPをダウンロード',
+    move: '移動 / 名前の変更',
+    delete: '削除',
+    edit: '編集',
+    view: '表示',
+    save: '保存',
+    back: '戻る',
+    notEditable: 'ファイルサイズが大きすぎるかバイナリファイルのため、編集できません',
+    deleteConfirm: (name) => `\`${name}\` を削除してもよろしいですか？`,
+    deleteSuccess: '削除しました',
+    deleteFailed: (name) => `\`${name}\` の削除に失敗しました：`,
+    moveSuccess: '移動しました',
+    moveFailed: (oldPath, newPath) => `\`${oldPath}\` から \`${newPath}\` への移動に失敗しました：`,
+    overwriteConfirm: '対象のファイルは既に存在します。上書きしますか？',
+    saveSuccess: '保存しました',
+    saveFailed: '保存に失敗しました：',
+    folderCreated: 'フォルダを作成しました',
+    folderCreateFailed: (name) => `フォルダ \`${name}\` の作成に失敗しました：`,
+    fileCreated: 'ファイルを作成しました',
+    fileCreateFailed: (name) => `ファイル \`${name}\` の作成に失敗しました：`,
+    getTokenFailed: 'トークンの取得に失敗しました',
+    downloadFailed: 'ダウンロードに失敗しました：',
+    getFileFailed: 'ファイルの取得に失敗しました：',
+    newFolderPrompt: 'フォルダ名を入力してください',
+    newFilePrompt: 'ファイル名を入力してください',
+    movePathPrompt: '新しいパスを入力してください',
+    footerText: typeof window !== 'undefined' ? (window.APP_NAME) : '',
+    items: (count) => count === 1 ? '個の項目' : '個の項目',
+    ctxDownload: 'ダウンロード',
+    ctxMove: '移動 / 名前の変更',
+    ctxDelete: '削除',
+    ctxEdit: '編集',
+    language: '言語',
+    chinese: '中文',
+    english: 'English',
+    japanese: '日本語',
+    // 批量操作
+    selectFirst: '削除する項目を先に選択してください',
+    bulkDeleteConfirm: (count) => `選択した ${count} 個の項目を削除してもよろしいですか？`,
+    bulkDeleteSuccess: (count) => `${count} 個の項目を削除しました`,
+    bulkDeletePartial: (ok, fail) => `${ok} 個の削除に成功、${fail} 個が失敗しました`,
+    bulkDeleteFailed: '削除に失敗しました',
+    bulkDownload: (n) => `${n} 個の項目をダウンロード`,
+    bulkDownloading: (cur, total) => `ダウンロード中 ${cur}/${total}...`,
+    // 批量下载
+    downloadingTitle: 'ダウンロード中、少々お待ちください…',
+    compressingTitle: '圧縮中、少々お待ちください…',
+    downloadSectionLabel: 'ファイルをダウンロード',
+    compressSectionLabel: 'ZIP圧縮',
+    zipBuilding: 'パッケージを作成中、少々お待ちください…',
+    zipFetching: (name, cur, total) => `${name} を取得中（${cur}/${total}）`,
+    zipCompressing: '圧縮してZIPを生成中…',
+    zipDone: (n) => `${n} 個の項目をパッケージ化しました。ダウンロードを開始します`,
+    zipFallbackTitle: '個別にダウンロードします',
+    zipFallbackBodySize: (size, count, limitMB) => {
+      const limitDisplay = limitMB >= 1024 ? `${(limitMB / 1024).toFixed(2)} GB` : `${limitMB} MB`;
+      return `選択された ${count} 個の項目の合計サイズは約 <strong>${size}</strong> であり、一括パッケージ上限（${limitDisplay}）を超えています。<br>${count} 個のファイルを順次個別にダウンロードします。このページを閉じないでください。`;
+    },
+    zipFallbackBodyDir: (size, count, limitMB) => {
+      const limitDisplay = limitMB >= 1024 ? `${(limitMB / 1024).toFixed(2)} GB` : `${limitMB} MB`;
+      return `選択項目にフォルダが含まれているため、事前にサイズを計算できません${size ? `（判明しているファイル分: 約 <strong>${size}</strong>）` : ''}。<br>${count} 個のファイルを順次個別にダウンロードします。このページを閉じないでください。`;
+    },
+    zipFallbackStart: '個別のダウンロードを開始',
+    zipFallbackDoing: (cur, total, name) => `ダウンロード中 ${cur}/${total}：${name}`,
+    zipFallbackDone: (n) => `${n} 個のファイルがダウンロードキューに追加されました`,
+    zipError: (msg) => `パッケージダウンロードに失敗しました：${msg}`,
+    file: 'ファイル',
+    overallProgress: '全体の進捗',
+    sizeUnknown: '不明（フォルダを含む）',
+    sizeUnknownSuffix: '（ファイルのみ）',
+    exitSelection: '選択を解除',
+    selected: (n) => `${n} 件選択中`,
+    loginSuccess: 'ログインしました',
+    loginFailed: '認証に失敗しました：ユーザー名またはパスワードが正しくありません',
+    loginError: (msg) => `ログインに失敗しました：${msg}`,
+    // 通用模态框
+    confirm: '確認',
+    ok: 'OK',
+    cancel: 'キャンセル',
+    deleteTitle: '削除の確認',
+    overwriteTitle: '同名ファイルが存在します',
+    newFolderTitle: '新規フォルダ',
+    newFileTitle: '新規ファイル',
+    moveTitle: '移動 / 名前の変更',
+    newFolderLabel: 'フォルダ名',
+    newFileLabel: 'ファイル名',
+    moveLabel: '新しいパス',
+    noData: 'データがありません',
+    uploadComplete: 'アップロード完了',
+    pageNotFound: 'ページが見つかりません',
+    pageNotFoundDesc: 'お探しのページは存在しないか、移動した可能性があります。',
+    goBack: 'トップページに戻る',
+    checkUrl: 'URLが正しいかご確認ください',
   }
 };
 
 // 当前语言
-let CURRENT_LANG = 'zh-CN';
+let CURRENT_LANG = typeof window !== 'undefined' && window.CURRENT_LANG ? window.CURRENT_LANG : 'zh-CN';
+if (typeof window !== 'undefined') {
+  window.CURRENT_LANG = CURRENT_LANG;
+}
 
 /**
  * 翻译函数
@@ -314,21 +472,29 @@ let CURRENT_LANG = 'zh-CN';
  * @returns {string}
  */
 function t(key, ...args) {
-  const value = I18N[CURRENT_LANG][key];
+  const lang = (typeof window !== 'undefined' && window.CURRENT_LANG) || CURRENT_LANG || 'zh-CN';
+  const langData = I18N[lang] || I18N['zh-CN'] || {};
+  let value = langData[key];
+  if (value === undefined) {
+    const fallback = I18N['zh-CN'] || I18N['en-US'] || {};
+    value = fallback[key];
+  }
   if (typeof value === 'function') return value(...args);
   return value !== undefined ? value : key;
 }
 
 /** 检测系统语言 */
 function detectSystemLanguage() {
-  const userLang = navigator.language || navigator.userLanguage;
-  return userLang.startsWith('zh') ? 'zh-CN' : 'en-US';
+  const userLang = navigator.language || navigator.userLanguage || '';
+  if (userLang.startsWith('zh')) return 'zh-CN';
+  if (userLang.startsWith('ja')) return 'ja-JP';
+  return 'en-US';
 }
 
 /** 读取保存的语言设置 */
 function loadLanguage() {
   const saved = localStorage.getItem('dufs_language');
-  if (saved === 'zh-CN' || saved === 'en-US') return saved;
+  if (saved === 'zh-CN' || saved === 'en-US' || saved === 'ja-JP') return saved;
   return detectSystemLanguage();
 }
 
@@ -428,6 +594,12 @@ function updateTranslations() {
   // 语言按钮当前语言文本
   const $currentLang = qs('.current-lang');
   if ($currentLang) {
-    $currentLang.textContent = CURRENT_LANG === 'zh-CN' ? t('chinese') : t('english');
+    if (CURRENT_LANG === 'zh-CN') {
+      $currentLang.textContent = t('chinese');
+    } else if (CURRENT_LANG === 'ja-JP') {
+      $currentLang.textContent = t('japanese');
+    } else {
+      $currentLang.textContent = t('english');
+    }
   }
 }

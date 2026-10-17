@@ -162,24 +162,33 @@
         pageNotFoundDesc: 'Sorry, the page you are looking for does not exist.',
         goBack: 'Go Back',
         checkUrl: 'Please check if the URL is correct'
+      },
+      'ja-JP': {
+        pageNotFound: 'ページが見つかりません',
+        pageNotFoundDesc: 'お探しのページは存在しないか、移動した可能性があります。',
+        goBack: 'トップページに戻る',
+        checkUrl: 'URLが正しいかご確認ください'
       }
     };
 
     let CURRENT_LANG = 'zh-CN';
 
     function detectSystemLanguage() {
-      const userLang = navigator.language || navigator.userLanguage;
-      return userLang.startsWith('zh') ? 'zh-CN' : 'en-US';
+      const userLang = navigator.language || navigator.userLanguage || '';
+      if (userLang.startsWith('zh')) return 'zh-CN';
+      if (userLang.startsWith('ja')) return 'ja-JP';
+      return 'en-US';
     }
 
     function loadLanguage() {
       const saved = localStorage.getItem('dufs_language');
-      if (saved === 'zh-CN' || saved === 'en-US') return saved;
+      if (saved === 'zh-CN' || saved === 'en-US' || saved === 'ja-JP') return saved;
       return detectSystemLanguage();
     }
 
     function t(key) {
-      return I18N[CURRENT_LANG][key] || key;
+      const langData = I18N[CURRENT_LANG] || I18N['zh-CN'] || {};
+      return langData[key] || (I18N['zh-CN'] && I18N['zh-CN'][key]) || key;
     }
 
     function updateTranslations() {

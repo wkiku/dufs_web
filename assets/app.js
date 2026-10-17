@@ -132,16 +132,25 @@ function showAlert(message, title = '') {
 
 function setLanguage(lang) {
   CURRENT_LANG = lang;
+  if (typeof window !== 'undefined') {
+    window.CURRENT_LANG = lang;
+  }
   localStorage.setItem('dufs_language', lang);
   document.documentElement.lang = lang;
   updateTranslations();
 
   if (DATA) {
+    DIR_EMPTY_NOTE = PARAMS.get('q')
+      ? t('noResults')
+      : DATA.dir_exists ? t('emptyFolder') : t('willCreateFolder');
     renderPathsTableHead();
     renderPathsTableBody(); // 异步执行，不等待
     renderGridView(); // 异步执行，不等待
     updateFileCount();
     updateEmptyState();
+    if (typeof addBreadcrumb === 'function') {
+      addBreadcrumb(DATA.href, DATA.uri_prefix);
+    }
   }
 }
 
@@ -187,6 +196,7 @@ window.addEventListener('DOMContentLoaded', async () => {
 
   DATA           = JSON.parse(decodeBase64($indexData.innerHTML));
   CURRENT_LANG   = loadLanguage();
+  if (typeof window !== 'undefined') window.CURRENT_LANG = CURRENT_LANG;
   DIR_EMPTY_NOTE = PARAMS.get('q')
     ? t('noResults')
     : DATA.dir_exists ? t('emptyFolder') : t('willCreateFolder');

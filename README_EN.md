@@ -80,6 +80,7 @@ Dufs Web is a feature-rich file server **web frontend** solution built with vani
 - **Multi-language Support**:
   - 🇨🇳 简体中文
   - 🇺🇸 English
+  - 🇯🇵 日本語
 - **Auto Detection**: Automatically detects and applies system language
 - **Persistence**: Language settings saved in localStorage
 - **Real-time Switch**: Instant UI update when switching languages
@@ -322,9 +323,10 @@ Add new language config in `i18n.js`:
 const I18N = {
   'zh-CN': { /* ... */ },
   'en-US': { /* ... */ },
-  'ja-JP': {
-    // Add Japanese translations
-    searchPlaceholder: 'ファイルやフォルダを検索...',
+  'ja-JP': { /* ... */ },
+  'ko-KR': {
+    // Add Korean translations
+    searchPlaceholder: '파일 또는 폴더 검색...',
     // ... other translations
   }
 };
