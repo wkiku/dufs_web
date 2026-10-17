@@ -4,12 +4,20 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script>
+    try {
+      const savedLanguage = localStorage.getItem('dufs_language');
+      if (['zh-CN', 'en-US', 'ja-JP'].includes(savedLanguage)) {
+        document.documentElement.lang = savedLanguage;
+      }
+    } catch (_) {}
+  </script>
   <noscript>
     <meta http-equiv="refresh" content="0; url=?noscript">
   </noscript>
   <link rel="icon" type="image/x-icon" href="__ASSETS_PREFIX__favicon.ico">
-  <link rel="stylesheet" href="__ASSETS_PREFIX__base.css?v=1.1.0">
-  <link rel="stylesheet" href="__ASSETS_PREFIX__components.css?v=1.1.0">
+  <link rel="stylesheet" href="__ASSETS_PREFIX__base.css?v=1.1.3">
+  <link rel="stylesheet" href="__ASSETS_PREFIX__components.css?v=1.1.7">
 </head>
 
 <body>
@@ -242,11 +250,27 @@
             <!-- 表头：独立圆角容器 -->
             <div class="paths-table-header-wrap hidden" id="pathsTableHeaderWrap">
               <table class="paths-table-head">
+                <colgroup>
+                  <col class="cell-checkbox">
+                  <col class="cell-icon">
+                  <col class="cell-name">
+                  <col class="cell-mtime">
+                  <col class="cell-size">
+                  <col class="cell-actions">
+                </colgroup>
                 <thead></thead>
               </table>
             </div>
             <!-- 表体 -->
             <table class="paths-table hidden">
+              <colgroup>
+                <col class="cell-checkbox">
+                <col class="cell-icon">
+                <col class="cell-name">
+                <col class="cell-mtime">
+                <col class="cell-size">
+                <col class="cell-actions">
+              </colgroup>
               <tbody></tbody>
             </table>
           </div>
@@ -264,7 +288,7 @@
       </div>
 
       <!-- 编辑器页面 -->
-      <div class="editor-page hidden">
+      <div class="editor-page hidden" translate="no">
         <div class="editor-toolbar">
           <button class="btn btn-primary save-btn hidden" title="保存">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -308,7 +332,8 @@
           </svg>
           <p class="not-editable-text"></p>
         </div>
-        <textarea id="editor" class="editor hidden" spellcheck="false"></textarea>
+        <textarea id="editor" class="editor hidden notranslate" translate="no" spellcheck="false"></textarea>
+        <audio id="audio-preview" class="audio-preview hidden" controls preload="metadata"></audio>
         <iframe id="preview-frame" class="preview-frame hidden" referrerpolicy="no-referrer"></iframe>
       </div>
     </main>
@@ -534,11 +559,11 @@
     window.APP_NAME = 'Dufs';
   </script>
   <!-- 模块加载顺序：工具函数 → 多语言 → 认证 → 上传器 → 主逻辑 -->
-  <script src="__ASSETS_PREFIX__utils.js?v=1.1.0"></script>
-  <script src="__ASSETS_PREFIX__i18n.js?v=1.1.0"></script>
-  <script src="__ASSETS_PREFIX__auth.js?v=1.1.0"></script>
-  <script src="__ASSETS_PREFIX__uploader.js?v=1.1.0"></script>
-  <script src="__ASSETS_PREFIX__app.js?v=1.1.0"></script>
+  <script src="__ASSETS_PREFIX__utils.js?v=1.1.4"></script>
+  <script src="__ASSETS_PREFIX__i18n.js?v=1.1.4"></script>
+  <script src="__ASSETS_PREFIX__auth.js?v=1.1.3"></script>
+  <script src="__ASSETS_PREFIX__uploader.js?v=1.1.3"></script>
+  <script src="__ASSETS_PREFIX__app.js?v=1.1.11"></script>
 </body>
 
 </html>

@@ -10,6 +10,7 @@ const IFRAME_FORMATS = [
   '.mp4', '.mov', '.avi', '.wmv', '.flv', '.webm',
   '.mp3', '.ogg', '.wav', '.m4a',
 ];
+const AUDIO_FORMATS = ['.mp3', '.ogg', '.wav', '.m4a'];
 const EDITOR_FORMATS = [
   '.txt', '.md', '.markdown', '.json', '.yaml', '.yml', '.xml', '.html', '.htm',
   '.css', '.scss', '.less', '.js', '.jsx', '.ts', '.tsx', '.vue', '.py', '.rb',

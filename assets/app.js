@@ -19,6 +19,14 @@ let _checkboxDelegateAttached = false; // tbody change 委托是否已绑定
 let _listBulkBound            = false;  // 列表批量操作栏是否已绑定
 let _gridSelectionMode        = false; // 网格视图是否处于多选模式
 
+// bfcache から一覧へ戻ったとき、古い一覧データを再取得する
+window.addEventListener('pageshow', (event) => {
+  if (event.persisted && DATA?.kind === 'Index') {
+    PARAMS = new URLSearchParams(window.location.search);
+    loadDirectory(window.location.pathname, true);
+  }
+});
+
 // ---------- 页面状态跟踪 ----------
 let _editorOriginalContent = null; // 编辑器原始内容
 let _editorHasChanges = false;     // 编辑器内容是否被修改
@@ -181,9 +189,9 @@ function handleResize() {
   const $headerTable = document.querySelector('.paths-table-header-wrap table');
   const $mainTable = document.querySelector('.paths-table');
   if ($headerTable && $mainTable) {
-    // 使用 offsetWidth 而不是 clientWidth，因为 offsetWidth 包含滚动条宽度
-    // 这样可以确保表头宽度与表体（包括滚动条）宽度一致
-    $headerTable.style.width = $mainTable.offsetWidth + 'px';
+    // 表头不带滚动条，因此宽度应与表体可用内容区一致
+    // offsetWidth 会把滚动条预留空间也算进去，导致列（包括复选框）偏移
+    $headerTable.style.width = $mainTable.clientWidth + 'px';
   }
   
   // 更新智能滚动条状态
@@ -196,6 +204,7 @@ window.addEventListener('DOMContentLoaded', async () => {
 
   DATA           = JSON.parse(decodeBase64($indexData.innerHTML));
   CURRENT_LANG   = loadLanguage();
+  document.documentElement.lang = CURRENT_LANG;
   if (typeof window !== 'undefined') window.CURRENT_LANG = CURRENT_LANG;
   DIR_EMPTY_NOTE = PARAMS.get('q')
     ? t('noResults')
@@ -578,7 +587,7 @@ async function loadDirectory(path, skipPushState = false) {
     }
     
     // 加载新的目录数据
-    const res = await fetchWithAuth(jsonUrl);
+    const res = await fetchWithAuth(jsonUrl, { cache: 'no-store' });
     if (!res.ok) {
       throw new Error(`Failed to load directory: ${res.status}`);
     }
@@ -620,10 +629,8 @@ async function loadDirectory(path, skipPushState = false) {
     renderGridView();
     updateEmptyState();
     
-    // 更新文件计数
-    if ($fileCount) {
-      $fileCount.textContent = DATA.paths ? `${DATA.paths.length} ${t('items')}` : '';
-    }
+    // 更新目录数和文件数
+    updateFileCount();
     
     // 更新下载全部按钮的 href，确保指向当前目录
     if (DATA.allow_archive) {
@@ -753,14 +760,8 @@ function addGridItem($gridView, file, index, sortedPaths) {
     if (isDir) {
       loadDirectory(url);
     } else {
-      // 检查文件扩展名，如果是可编辑格式，用编辑器打开
-      const ext = extName(file.name).toLowerCase();
-      if (EDITOR_FORMATS.includes(ext)) {
-        location.href = url + '?edit';
-      } else {
-        // 使用带 token 的下载方式（如果已登录）
-        _downloadFile(url);
-      }
+      // 文件项点击进入只读查看页面；下载由操作栏下载按钮负责
+      location.href = url + '?view';
     }
   });
 
@@ -1271,13 +1272,15 @@ function addPathRow(file, index) {
       actionEdit = `<a class="action-btn" title="${t('edit')}" href="${url}?edit">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
       </a>`;
+    } else {
+      // 文件行有编辑按钮，目录行保留同宽空位以对齐后续操作图标
+      actionEdit = '<span class="action-btn action-btn-placeholder" aria-hidden="true"></span>';
     }
   }
 
   const sizeDisplay = isDir ? formatDirSize(file.size) : formatFileSize(file.size).join(' ');
 
-  const nameLinkClass = isDir ? '' : 'dlwt';
-  const nameLinkAttrs = nameLinkClass ? `class="${nameLinkClass}" href="${url}"` : `href="${url}"`;
+  const nameLinkAttrs = `href="${isDir ? url : url + '?view'}" title="${encodedName}"`;
 
   $pathsTableBody.insertAdjacentHTML('beforeend', `
     <tr id="pathRow${index}">
@@ -1346,9 +1349,9 @@ function setupListMultiSelect() {
     const link = e.target.closest('a[href]');
     if (link && !link.target) { // 没有 target="_blank" 的链接
       let href = link.getAttribute('href');
-      // 检查是否是编辑链接，如果是就让浏览器正常处理
-      if (href && href.includes('?edit')) {
-        return; // 不拦截，让编辑链接在当前窗口打开
+      // 编辑和只读查看链接由浏览器直接打开
+      if (href && (href.includes('?edit') || href.includes('?view'))) {
+        return;
       }
       
       e.preventDefault();
@@ -1577,7 +1580,9 @@ function updateFileCount() {
   const valid     = DATA.paths.filter(Boolean);
   const dirCount  = valid.filter(p => p.path_type.endsWith('Dir')).length;
   const fileCount = valid.length - dirCount;
-  $fileCount.textContent = `${dirCount} ${t('items', dirCount)}，${fileCount} ${t('items', fileCount)}`;
+  if ($fileCount) {
+    $fileCount.textContent = `${t('directories')}: ${dirCount} · ${t('files')}: ${fileCount}`;
+  }
 }
 
 function updateEmptyState() {
@@ -2107,7 +2112,20 @@ async function setupEditorPage() {
   }
 
   if (!DATA.editable) {
-    const ext = extName(baseName(url));
+    const ext = extName(baseName(url)).toLowerCase();
+    if (AUDIO_FORMATS.includes(ext)) {
+      const $audioPreview = document.getElementById('audio-preview');
+      $notEditable.classList.add('hidden');
+      $audioPreview.classList.remove('hidden');
+      try {
+        const res = await fetchWithAuth(url);
+        await assertResOK(res);
+        $audioPreview.src = URL.createObjectURL(await res.blob());
+      } catch (err) {
+        showToast(`${t('getFileFailed')}${err.message}`);
+      }
+      return;
+    }
     if (IFRAME_FORMATS.includes(ext)) {
       $notEditable.classList.add('hidden');
       $previewFrame.classList.remove('hidden');

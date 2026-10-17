@@ -251,6 +251,7 @@
 .paths-table tbody {
   display: table;
   width: 100%;
+  table-layout: fixed;
 }
 
 /* 滚动条平滑过渡 */
@@ -283,14 +284,29 @@
   text-align: center;
 }
 
+/* セル共通の left 揃えより優先して、両方のチェックボックス列を中央に配置 */
+.paths-table-header-wrap .cell-checkbox,
+.paths-table .cell-checkbox {
+  width: 48px;
+  min-width: 48px;
+  padding: 0 !important;
+  text-align: center;
+}
+
 /* 图标列 ── 调整此值改变图标列宽 */
 .cell-icon {
   width: 44px;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  text-align: center;
 }
 
 /* 文件名列 ── 不写 width，自动占满剩余宽度 */
 .cell-name {
-  /* 留空，table-layout:fixed 下自动填充 */
+  max-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 /* 修改时间列 ── 调整此值改变时间列宽 */
@@ -321,8 +337,10 @@
 }
 
 .cell-checkbox input[type="checkbox"] {
+  display: block;
   width: 16px;
   height: 16px;
+  margin: 0 auto;
   cursor: pointer;
 }
 
@@ -414,24 +432,35 @@
 
 /* 文件列表单元格 */
 .cell-icon {
-  width: 40px;
+  width: 44px;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  text-align: center;
 }
 
 .cell-icon svg {
   width: 32px;
   height: 32px;
+  display: inline-block;
+  vertical-align: middle;
+  flex-shrink: 0;
   /* 图标颜色由 SVG 内联 fill 控制，不再用 CSS 覆盖 */
 }
 
 .cell-name {
   font-weight: 500;
   color: var(--text-primary);
+  max-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .cell-name a {
   color: var(--primary-color);
   text-decoration: none;
-  display: inline-block;
+  display: block;
+  max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -478,6 +507,11 @@
   cursor: pointer;
   transition: all var(--transition-fast);
   color: var(--text-secondary);
+}
+
+.action-btn-placeholder {
+  visibility: hidden;
+  pointer-events: none;
 }
 
 .action-btn:hover {
@@ -926,6 +960,11 @@
   background: var(--bg-primary);
 }
 
+.audio-preview {
+  width: 100%;
+  margin-top: var(--spacing-md);
+}
+
 /* ==================== 模态框 ==================== */
 .modal {
   position: fixed;
@@ -1107,6 +1146,7 @@
 /* ==================== 上下文菜单 ==================== */
 .context-menu {
   position: fixed;
+  font-family: inherit;
   background: var(--bg-primary);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
@@ -1118,6 +1158,7 @@
 
 .context-menu-item {
   display: flex;
+  font-family: inherit;
   align-items: center;
   gap: var(--spacing-sm);
   padding: var(--spacing-sm) var(--spacing-md);
@@ -1197,6 +1238,7 @@
     font-size: 0.85rem;
   }
   
+  .paths-table-header-wrap th,
   .paths-table th,
   .paths-table td {
     padding: var(--spacing-sm);
